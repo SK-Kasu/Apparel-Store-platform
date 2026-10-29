@@ -1,0 +1,21 @@
+{
+  "name": "database",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "db:generate": "prisma generate --schema schema.prisma",
+    "db:push": "prisma db push --schema schema.prisma",
+    "db:seed": "ts-node --project tsconfig.json seed.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.3",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "prisma": "6.19.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}

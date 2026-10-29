@@ -12,6 +12,7 @@
     "build": "npm run build -w server && npm run build -w client",
     "start": "npm run start -w server",
     "seed": "npm run seed -w server",
+    "db:seed": "npm --prefix database exec -- ts-node --project database/tsconfig.json database/seed.ts",
     "typecheck": "npm run typecheck -w server && npm run typecheck -w client",
     "test": "npm run test -w server"
   },
