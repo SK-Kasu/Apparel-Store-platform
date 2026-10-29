@@ -1,17 +1,7 @@
 "use client";
 
 import type { LucideIcon } from "lucide-react";
-import {
-  ChevronRight,
-  Footprints,
-  Gem,
-  Layers,
-  PersonStanding,
-  Ruler,
-  Shirt,
-  ShoppingBag,
-  Sparkles
-} from "lucide-react";
+import { ChevronRight, Gem, Layers, Shirt } from "lucide-react";
 
 export type Department = "Women" | "Men";
 
@@ -21,13 +11,8 @@ type NavItem = {
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: "New In", icon: Sparkles },
-  { label: "Dresses", icon: PersonStanding },
-  { label: "Tops", icon: Shirt },
   { label: "Outerwear", icon: Layers },
-  { label: "Pants", icon: Ruler },
-  { label: "Shoes", icon: Footprints },
-  { label: "Bags", icon: ShoppingBag },
+  { label: "Tops", icon: Shirt },
   { label: "Accessories", icon: Gem }
 ];
 

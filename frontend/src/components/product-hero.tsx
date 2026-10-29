@@ -8,6 +8,7 @@ type ProductHeroProps = {
   selectedColor: string;
   selectedSize: string;
   isFavorite: boolean;
+  isAddingToBag?: boolean;
   onSelectColor: (color: string) => void;
   onSelectSize: (size: string) => void;
   onToggleFavorite: () => void;
@@ -18,6 +19,7 @@ export function ProductHero({
   selectedColor,
   selectedSize,
   isFavorite,
+  isAddingToBag = false,
   onSelectColor,
   onSelectSize,
   onToggleFavorite,
@@ -39,9 +41,9 @@ export function ProductHero({
             The signature silhouette
           </p>
           <h1 className="mt-3 font-serif text-[52px] leading-[0.9] tracking-[-0.02em] text-cream sm:text-6xl xl:text-[80px]">
-            Beige
+            Premium
             <br />
-            <span className="text-sand-soft">Trench Coat</span>
+            <span className="text-sand-soft">Beige Trench Coat</span>
           </h1>
           <p className="mt-6 max-w-md font-serif text-lg italic leading-relaxed text-zinc-400 sm:text-xl">
             A fluid, double-breasted trench cut from brushed cotton twill. Softly structured,
@@ -202,9 +204,10 @@ export function ProductHero({
             <button
               type="button"
               onClick={onAddToBag}
-              className="flex h-14 items-center justify-center gap-3 rounded-2xl bg-sand px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-ink transition hover:bg-[#E0B68E] active:scale-[0.995]"
+              disabled={isAddingToBag}
+              className="flex h-14 items-center justify-center gap-3 rounded-2xl bg-sand px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-ink transition hover:bg-[#E0B68E] active:scale-[0.995] disabled:cursor-wait disabled:opacity-70"
             >
-              Add To Bag
+              {isAddingToBag ? "Adding..." : "Add To Bag"}
               <span className="h-1 w-1 rounded-full bg-ink/50" />
               <span className="text-[10px] tracking-[0.12em]">$129.99</span>
             </button>
