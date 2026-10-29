@@ -2,6 +2,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator backendClient {
+  provider = "prisma-client-js"
+  output   = "../backend/generated/prisma"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -19,6 +24,13 @@ enum OrderStatus {
   DELIVERED
   ON_HOLD
   CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
 }
 
 model Category {
@@ -54,6 +66,7 @@ model Product {
   tenant      Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   category    Category?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   variants    ProductVariant[]
+  orderItems  OrderItem[]
 
   @@index([tenantId])
   @@index([categoryId])
@@ -68,17 +81,42 @@ model ProductVariant {
   inventoryCount Int     @default(0)
   variantPrice   Decimal @db.Decimal(12, 2)
   product        Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderItems     OrderItem[]
 
   @@unique([productId, size, color])
   @@index([productId])
 }
 
 model Order {
-  id             String      @id @default(uuid()) @db.Uuid
-  tenantId       String      @db.Uuid
-  status         OrderStatus @default(PENDING)
-  aggregateTotal Decimal     @db.Decimal(14, 2)
-  tenant         Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  id               String        @id @default(uuid()) @db.Uuid
+  tenantId         String        @db.Uuid
+  status           OrderStatus   @default(PENDING)
+  paymentStatus    PaymentStatus @default(PENDING)
+  paymentReference String?       @unique @db.VarChar(120)
+  aggregateTotal   Decimal       @db.Decimal(14, 2)
+  tenant           Tenant        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  items            OrderItem[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 
   @@index([tenantId, status])
+  @@index([tenantId, paymentStatus])
+  @@index([paymentStatus, createdAt])
+}
+
+model OrderItem {
+  id        String         @id @default(uuid()) @db.Uuid
+  orderId   String         @db.Uuid
+  productId String         @db.Uuid
+  variantId String         @db.Uuid
+  quantity  Int
+  unitPrice Decimal        @db.Decimal(12, 2)
+  lineTotal Decimal        @db.Decimal(14, 2)
+  order     Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product        @relation(fields: [productId], references: [id], onDelete: Restrict)
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@index([variantId])
+  @@index([productId])
 }
