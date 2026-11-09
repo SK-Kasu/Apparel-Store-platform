@@ -14,7 +14,9 @@ export function TopBar({ favoriteCount, bagCount }: TopBarProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-white/[0.06] bg-[#121212]/85 backdrop-blur-xl">
       <div className="flex flex-wrap items-center gap-3 px-4 py-4 sm:px-6 lg:px-10">
-        <div className="font-serif text-2xl tracking-tight text-cream lg:hidden">Daylog</div>
+        <div className="font-serif text-[17px] leading-tight tracking-tight text-cream sm:text-lg lg:hidden">
+          Radiant Regalia Collection
+        </div>
 
         <div className="order-3 flex w-full items-center gap-3 lg:order-none lg:mx-auto lg:w-auto lg:max-w-2xl lg:flex-1">
           <label className="group flex h-12 flex-1 items-center gap-3 rounded-full border border-white/[0.08] bg-white/[0.03] px-5 transition focus-within:border-sand/50 focus-within:bg-white/[0.04]">
@@ -61,6 +63,9 @@ export function TopBar({ favoriteCount, bagCount }: TopBarProps) {
             </span>
           </button>
         </div>
+      </div>
+      <div className="border-t border-white/[0.04] px-4 py-2.5 text-center text-[8px] uppercase tracking-[0.34em] text-sand/80 sm:px-6 lg:px-10">
+        All under one roof
       </div>
     </header>
   );

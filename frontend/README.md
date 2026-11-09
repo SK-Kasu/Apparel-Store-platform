@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Radiant Regalia Collection - All under one roof
+
+Storefront and administrative workspace for **Radiant Regalia Collection**.
+
+## Stack
+
+- Next.js 15 App Router with React 19
+- Tailwind CSS v4 with the Radiant Regalia Collection dark theme tokens
+- Prisma-backed administrative authentication
+- AES-256-GCM encrypted stateless session cookies
+- Native View Transitions for category and cart interactions
 
 ## Getting Started
 
-First, run the development server:
+From the repository root:
 
 ```bash
+cd frontend
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The frontend runs on [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Routes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/` - Radiant Regalia Collection storefront and hero workspace
+- `/admin/login` - administrator credentials portal
+- `/admin` - protected administrative workspace
+- `/api/auth` - stateless login and logout endpoint
 
-## Learn More
+## Branding
 
-To learn more about Next.js, take a look at the following resources:
+- Official brand name: `Radiant Regalia Collection`
+- Official motto: `All under one roof`
+- SEO title: `Radiant Regalia Collection - All under one roof`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Root metadata, navigation headers, hero typography, footer copy, and administrative surfaces all use the official brand assets.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+```bash
+npm run dev      # start the Next.js development server
+npm run build    # create an optimized production build
+npm run start    # serve the production build
+npm run lint     # run ESLint
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Environment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The administrative portal expects:
+
+- `DATABASE_URL` for Prisma
+- `AUTH_SECRET` with at least 32 characters
+- `ADMIN_PASSWORD` for the seeded administrator account
+
+See the repository-level `.env.example` for the complete configuration surface.
+
+## Verification
+
+```bash
+npx tsc --noEmit
+npm run lint
+npm run build
+```

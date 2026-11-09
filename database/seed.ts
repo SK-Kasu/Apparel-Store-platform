@@ -6,12 +6,14 @@ import { hashPassword } from './password';
 loadEnv({ path: resolve(__dirname, '.env') });
 loadEnv({ path: resolve(__dirname, '../.env') });
 
+const BRAND_NAME = 'Radiant Regalia Collection';
+const BRAND_MOTTO = 'All under one roof';
 const ADMIN_EMAIL = 'admin@radiantregalia.co.ke';
-const ADMIN_NAME = 'Radiant Regalia Administrator';
+const ADMIN_NAME = `${BRAND_NAME} Administrator`;
 
 const TENANTS = [
-  { businessName: 'Aura Boutique', slug: 'aura-boutique' },
-  { businessName: 'Vanguard Threads', slug: 'vanguard-threads' }
+  { businessName: BRAND_NAME, slug: 'radiant-regalia-collection' },
+  { businessName: `${BRAND_NAME} Atelier`, slug: 'radiant-regalia-collection-atelier' }
 ] as const;
 
 const CATEGORIES = [
@@ -177,13 +179,13 @@ async function main(): Promise<void> {
       }
     }
 
-    console.log(`Admin account ready: ${admin.email} (${admin.role}).`);
+    console.log(`${BRAND_NAME} admin account ready: ${admin.email} (${admin.role}).`);
     if (generatedAdminPassword) {
       console.log(`Generated admin password: ${generatedAdminPassword}`);
     }
     console.log(
-      `Seed complete: ${tenantRecords.length} tenants, ${categoryRecords.length} categories, ` +
-        `${productCount} products, ${variantCount} variants.`
+      `${BRAND_NAME} seed complete - ${BRAND_MOTTO}: ${tenantRecords.length} tenants, ` +
+        `${categoryRecords.length} categories, ${productCount} products, ${variantCount} variants.`
     );
   } finally {
     await prisma.$disconnect();
