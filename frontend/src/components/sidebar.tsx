@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   ChevronRight,
@@ -10,7 +11,8 @@ import {
   Ruler,
   Shirt,
   ShoppingBag,
-  Sparkles
+  Sparkles,
+  X
 } from "lucide-react";
 
 export type Department = "Women" | "Men";
@@ -38,20 +40,27 @@ type NavigationProps = {
   onSelectDepartment: (department: Department) => void;
 };
 
-export function Sidebar({
+type SidebarProps = NavigationProps & {
+  isOpen?: boolean;
+  onClose?: () => void;
+};
+
+function SidebarContent({
   activeCategory,
   onSelectCategory,
   department,
   onSelectDepartment
 }: NavigationProps) {
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 hidden w-[280px] flex-col border-r border-white/[0.06] bg-[#151515] px-5 py-6 lg:flex">
+    <>
       <div className="flex items-center gap-3 px-1">
         <div className="flex h-11 w-11 items-center justify-center rounded-full border border-sand/40 font-serif text-xl text-sand">
-          D
+          R
         </div>
         <div>
-          <p className="font-serif text-[28px] leading-none tracking-tight text-cream">Daylog</p>
+          <p className="font-serif text-[24px] leading-none tracking-tight text-cream">
+            Radiant Regalia
+          </p>
           <p className="mt-1 text-[8px] uppercase tracking-[0.38em] text-zinc-500">Atelier</p>
         </div>
       </div>
@@ -123,14 +132,92 @@ export function Sidebar({
           </button>
         </div>
         <p className="mt-5 px-1 text-[9px] uppercase tracking-[0.22em] text-zinc-600">
-          © 2026 Daylog Studio
+          © 2026 Radiant Regalia Studio
         </p>
       </div>
-    </aside>
+    </>
   );
 }
 
-export function MobileNav({ activeCategory, onSelectCategory }: Pick<NavigationProps, "activeCategory" | "onSelectCategory">) {
+export function Sidebar({
+  activeCategory,
+  onSelectCategory,
+  department,
+  onSelectDepartment,
+  isOpen = false,
+  onClose
+}: SidebarProps) {
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen]);
+
+  return (
+    <>
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[280px] flex-col border-r border-white/[0.06] bg-[#151515] px-5 py-6 lg:flex">
+        <SidebarContent
+          activeCategory={activeCategory}
+          onSelectCategory={onSelectCategory}
+          department={department}
+          onSelectDepartment={onSelectDepartment}
+        />
+      </aside>
+
+      <div
+        className={`fixed inset-0 z-50 lg:hidden ${
+          isOpen ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+        aria-hidden={!isOpen}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close navigation menu"
+          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+            isOpen ? "opacity-100" : "opacity-0"
+          }`}
+        />
+        <aside
+          id="mobile-navigation"
+          aria-label="Shop navigation"
+          className={`absolute inset-y-0 left-0 flex w-[280px] max-w-[85vw] flex-col border-r border-white/[0.06] bg-[#151515] px-5 py-6 shadow-2xl transition-transform duration-300 ease-out ${
+            isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          <div className="mb-2 flex justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close navigation menu"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.08] text-zinc-400 transition hover:border-sand/40 hover:text-sand"
+            >
+              <X size={17} />
+            </button>
+          </div>
+          <SidebarContent
+            activeCategory={activeCategory}
+            onSelectCategory={onSelectCategory}
+            department={department}
+            onSelectDepartment={onSelectDepartment}
+          />
+        </aside>
+      </div>
+    </>
+  );
+}
+
+export function MobileNav({
+  activeCategory,
+  onSelectCategory
+}: Pick<NavigationProps, "activeCategory" | "onSelectCategory">) {
   return (
     <nav
       className="flex gap-2 overflow-x-auto border-b border-white/[0.06] px-4 py-3 no-scrollbar lg:hidden"

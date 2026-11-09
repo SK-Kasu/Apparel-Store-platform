@@ -5,8 +5,8 @@ import { ArrowUpRight, Heart } from "lucide-react";
 import { COLOR_OPTIONS, SIZE_OPTIONS } from "@/lib/store-data";
 
 type ProductHeroProps = {
-  selectedColor: string;
-  selectedSize: string;
+  activeColor: string;
+  activeSize: string;
   isFavorite: boolean;
   onSelectColor: (color: string) => void;
   onSelectSize: (size: string) => void;
@@ -15,8 +15,8 @@ type ProductHeroProps = {
 };
 
 export function ProductHero({
-  selectedColor,
-  selectedSize,
+  activeColor,
+  activeSize,
   isFavorite,
   onSelectColor,
   onSelectSize,
@@ -25,7 +25,7 @@ export function ProductHero({
 }: ProductHeroProps) {
   return (
     <section className="overflow-hidden rounded-[2rem] border border-white/[0.07] bg-panel shadow-[0_30px_120px_-40px_rgba(0,0,0,0.9)]">
-      <div className="grid lg:grid-cols-[1.02fr_0.98fr]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="flex flex-col p-6 sm:p-9 xl:p-12">
           <div className="flex items-center justify-between gap-4">
             <span className="inline-flex items-center gap-2 rounded-full border border-sand/35 bg-sand/[0.07] px-3.5 py-2 text-[9px] font-semibold uppercase tracking-[0.26em] text-sand">
@@ -62,11 +62,11 @@ export function ProductHero({
               <p className="text-[9px] font-semibold uppercase tracking-[0.26em] text-zinc-500">
                 Colour
               </p>
-              <p className="text-[11px] text-zinc-300">{selectedColor}</p>
+              <p className="text-[11px] text-zinc-300">{activeColor}</p>
             </div>
             <div className="mt-4 flex items-center gap-3">
               {COLOR_OPTIONS.map((color) => {
-                const active = selectedColor === color.name;
+                const active = activeColor === color.name;
 
                 return (
                   <button
@@ -77,7 +77,7 @@ export function ProductHero({
                     aria-pressed={active}
                     className={`flex h-8 w-8 items-center justify-center rounded-full border transition ${
                       active
-                        ? "border-sand ring-1 ring-sand/40 ring-offset-2 ring-offset-panel"
+                        ? "border-[#D4A373] ring-2 ring-[#D4A373]/40 ring-offset-2 ring-offset-panel"
                         : "border-white/20 hover:border-white/50"
                     }`}
                   >
@@ -105,7 +105,7 @@ export function ProductHero({
             </div>
             <div className="mt-4 grid grid-cols-4 gap-2.5">
               {SIZE_OPTIONS.map((size) => {
-                const active = selectedSize === size;
+                const active = activeSize === size;
 
                 return (
                   <button
@@ -115,7 +115,7 @@ export function ProductHero({
                     aria-pressed={active}
                     className={`flex h-12 items-center justify-center rounded-xl border text-xs font-semibold tracking-[0.12em] transition ${
                       active
-                        ? "border-sand bg-sand text-ink"
+                        ? "border-[#D4A373] bg-[#D4A373]/10 text-[#D4A373]"
                         : "border-white/[0.09] bg-white/[0.02] text-zinc-400 hover:border-sand/40 hover:text-cream"
                     }`}
                   >
@@ -138,7 +138,7 @@ export function ProductHero({
         <div className="relative min-h-[520px] overflow-hidden bg-[#202020] lg:min-h-[700px]">
           <Image
             src="/products/trench-coat.jpg"
-            alt="Beige trench coat styled for the Daylog spring collection"
+            alt="Beige trench coat styled for the Radiant Regalia spring collection"
             fill
             priority
             sizes="(min-width: 1024px) 48vw, 100vw"

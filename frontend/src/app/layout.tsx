@@ -20,7 +20,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Daylog — Modern Essentials",
+  title: "Radiant Regalia — Modern Essentials",
   description:
     "A considered collection of modern essentials, softly tailored for everyday dressing."
 };
