@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { Send, Sparkles, X } from "lucide-react";
+import { Footer } from "@/components/footer";
 import { MobileNav, Sidebar, type Department } from "@/components/sidebar";
 import { ProductHero } from "@/components/product-hero";
 import { Recommendations } from "@/components/recommendations";
@@ -226,11 +227,9 @@ export default function Home() {
 
           <TrustBanner />
 
-          <footer className="mt-8 flex flex-col gap-2 border-t border-line pt-6 text-[9px] uppercase tracking-[0.22em] text-faint sm:flex-row sm:items-center sm:justify-between">
-            <p>Radiant Regalia — Modern essentials</p>
-            <p>Designed in Copenhagen · Shipped worldwide</p>
-          </footer>
         </main>
+
+        <Footer />
       </div>
 
       <div className="pointer-events-none fixed inset-0 z-50">
