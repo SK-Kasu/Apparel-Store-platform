@@ -4,33 +4,81 @@ import { config as loadEnv } from 'dotenv';
 loadEnv({ path: resolve(__dirname, '.env') });
 loadEnv({ path: resolve(__dirname, '../.env') });
 
-const TENANTS = [
-  { businessName: 'Aura Boutique', slug: 'aura-boutique' },
-  { businessName: 'Vanguard Threads', slug: 'vanguard-threads' }
-] as const;
-
-const CATEGORIES = [
-  { name: 'Footwear', slug: 'footwear' },
-  { name: 'Outerwear', slug: 'outerwear' },
-  { name: 'Tops', slug: 'tops' },
-  { name: 'Accessories', slug: 'accessories' }
-] as const;
-
-const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'] as const;
-
-const COLORS = [
-  { name: 'Onyx Black', code: 'ONX' },
-  { name: 'Off-White', code: 'OFW' },
-  { name: 'Crimson Red', code: 'CRM' },
-  { name: 'Indigo Denim', code: 'IND' }
-] as const;
-
-const BASE_PRICE_BY_CATEGORY: Record<string, string> = {
-  footwear: '180.00',
-  outerwear: '320.00',
-  tops: '95.00',
-  accessories: '65.00'
+type TenantSeed = {
+  businessName: string;
+  slug: string;
+  showroomAddress: string;
 };
+
+type CategorySeed = {
+  name: string;
+  slug: string;
+};
+
+type ProductSeed = {
+  tenantSlug: string;
+  categorySlug: string;
+  title: string;
+  description: string;
+  basePrice: string;
+  skuCode: string;
+  sizes: readonly string[];
+  colors: readonly { name: string; code: string }[];
+  inventoryPerVariant: number;
+};
+
+const TENANTS: readonly TenantSeed[] = [
+  {
+    businessName: 'Aura Boutique Ltd',
+    slug: 'aura-boutique',
+    showroomAddress: 'The Alchemist, Westlands, Nairobi'
+  },
+  {
+    businessName: 'Vanguard Luxury Regalia',
+    slug: 'vanguard-regalia',
+    showroomAddress: 'Imenti House, Nairobi CBD'
+  }
+];
+
+const CATEGORIES: readonly CategorySeed[] = [
+  { name: 'Khanga Wraps', slug: 'khanga-wraps' },
+  { name: 'Kitenge Tailored Blazers', slug: 'kitenge-tailored-blazers' },
+  { name: 'Urban Linen Tops', slug: 'urban-linen-tops' },
+  { name: 'Premium Outerwear', slug: 'premium-outerwear' }
+];
+
+const PRODUCTS: readonly ProductSeed[] = [
+  {
+    tenantSlug: 'aura-boutique',
+    categorySlug: 'premium-outerwear',
+    title: 'Maasai Fleece Trim Trench Coat',
+    description:
+      'A statement trench in heavyweight fleece with hand-finished Maasai trim, tailored for cool-season layering in Nairobi.',
+    basePrice: '6500.00',
+    skuCode: 'MFT',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: [
+      { name: 'Onyx Black', code: 'BLK' },
+      { name: 'Crimson Red', code: 'CRM' }
+    ],
+    inventoryPerVariant: 25
+  },
+  {
+    tenantSlug: 'vanguard-regalia',
+    categorySlug: 'urban-linen-tops',
+    title: 'Handwoven Kikoy Summer Shirt',
+    description:
+      'A breathable handwoven kikoy shirt with a relaxed summer cut, finished for warm-weather dressing and coastal evenings.',
+    basePrice: '3800.00',
+    skuCode: 'HKS',
+    sizes: ['M', 'L', 'XL'],
+    colors: [
+      { name: 'Indigo Denim', code: 'IND' },
+      { name: 'Off-White', code: 'OFW' }
+    ],
+    inventoryPerVariant: 25
+  }
+];
 
 async function main(): Promise<void> {
   if (!process.env.DATABASE_URL) {
@@ -42,16 +90,20 @@ async function main(): Promise<void> {
   const { prisma } = await import('./client');
 
   try {
-    const tenantRecords: Array<{ id: string; businessName: string; slug: string }> = [];
-    const categoryRecords: Array<{ id: string; name: string; slug: string }> = [];
+    const tenantRecords = new Map<string, { id: string; businessName: string; slug: string }>();
+    const categoryRecords = new Map<string, { id: string; name: string; slug: string }>();
 
     for (const tenantData of TENANTS) {
       const tenant = await prisma.tenant.upsert({
         where: { slug: tenantData.slug },
-        update: { businessName: tenantData.businessName },
+        update: {
+          businessName: tenantData.businessName,
+          showroomAddress: tenantData.showroomAddress
+        },
         create: tenantData
       });
-      tenantRecords.push(tenant);
+
+      tenantRecords.set(tenant.slug, tenant);
     }
 
     for (const categoryData of CATEGORIES) {
@@ -60,83 +112,89 @@ async function main(): Promise<void> {
         update: { name: categoryData.name },
         create: categoryData
       });
-      categoryRecords.push(category);
+
+      categoryRecords.set(category.slug, category);
     }
 
     let productCount = 0;
     let variantCount = 0;
 
-    for (const tenant of tenantRecords) {
-      for (const category of categoryRecords) {
-        const title = `${tenant.businessName} ${category.name} Capsule`;
-        const description = `${category.name} essentials curated for ${tenant.businessName}.`;
-        const basePrice = BASE_PRICE_BY_CATEGORY[category.slug] ?? '100.00';
+    for (const productData of PRODUCTS) {
+      const tenant = tenantRecords.get(productData.tenantSlug);
 
-        let product = await prisma.product.findFirst({
-          where: { tenantId: tenant.id, title }
-        });
+      if (!tenant) {
+        throw new Error(`Tenant "${productData.tenantSlug}" was not seeded.`);
+      }
 
-        if (product) {
-          product = await prisma.product.update({
-            where: { id: product.id },
+      const category = categoryRecords.get(productData.categorySlug);
+
+      if (!category) {
+        throw new Error(`Category "${productData.categorySlug}" was not seeded.`);
+      }
+
+      const existingProduct = await prisma.product.findFirst({
+        where: { tenantId: tenant.id, title: productData.title }
+      });
+
+      const product = existingProduct
+        ? await prisma.product.update({
+            where: { id: existingProduct.id },
             data: {
               categoryId: category.id,
-              description,
-              basePrice,
+              description: productData.description,
+              basePrice: productData.basePrice,
               isArchived: false
             }
-          });
-        } else {
-          product = await prisma.product.create({
+          })
+        : await prisma.product.create({
             data: {
               tenantId: tenant.id,
               categoryId: category.id,
-              title,
-              description,
-              basePrice,
+              title: productData.title,
+              description: productData.description,
+              basePrice: productData.basePrice,
               isArchived: false
             }
           });
-        }
 
-        productCount += 1;
+      productCount += 1;
 
-        for (const [sizeIndex, size] of SIZES.entries()) {
-          for (const [colorIndex, color] of COLORS.entries()) {
-            const sku = ['SW', tenant.slug, category.slug, size, color.code]
-              .join('-')
-              .toUpperCase();
-            const inventoryCount = 12 + sizeIndex * 2 + colorIndex;
+      for (const size of productData.sizes) {
+        for (const color of productData.colors) {
+          const sku = ['RAD', productData.skuCode, color.code, size].join('-').toUpperCase();
 
-            await prisma.productVariant.upsert({
-              where: { sku },
-              update: {
-                productId: product.id,
-                size,
-                color: color.name,
-                inventoryCount,
-                variantPrice: basePrice
-              },
-              create: {
-                productId: product.id,
-                sku,
-                size,
-                color: color.name,
-                inventoryCount,
-                variantPrice: basePrice
-              }
-            });
+          await prisma.productVariant.upsert({
+            where: { sku },
+            update: {
+              productId: product.id,
+              size,
+              color: color.name,
+              inventoryCount: productData.inventoryPerVariant,
+              variantPrice: productData.basePrice
+            },
+            create: {
+              productId: product.id,
+              sku,
+              size,
+              color: color.name,
+              inventoryCount: productData.inventoryPerVariant,
+              variantPrice: productData.basePrice
+            }
+          });
 
-            variantCount += 1;
-          }
+          variantCount += 1;
         }
       }
     }
 
     console.log(
-      `Seed complete: ${tenantRecords.length} tenants, ${categoryRecords.length} categories, ` +
+      `Seed complete: ${tenantRecords.size} tenants, ${categoryRecords.size} categories, ` +
         `${productCount} products, ${variantCount} variants.`
     );
+
+    for (const tenant of TENANTS) {
+      console.log(`- ${tenant.businessName} (${tenant.slug}): ${tenant.showroomAddress}`);
+    }
   } finally {
     await prisma.$disconnect();
   }

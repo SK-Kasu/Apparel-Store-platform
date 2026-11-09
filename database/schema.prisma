@@ -41,11 +41,12 @@ model Category {
 }
 
 model Tenant {
-  id           String    @id @default(uuid()) @db.Uuid
-  businessName String    @db.VarChar(160)
-  slug         String    @unique @db.VarChar(80)
-  products     Product[]
-  orders       Order[]
+  id              String    @id @default(uuid()) @db.Uuid
+  businessName    String    @db.VarChar(160)
+  slug            String    @unique @db.VarChar(80)
+  showroomAddress String?   @db.VarChar(255)
+  products        Product[]
+  orders          Order[]
 }
 
 model User {
