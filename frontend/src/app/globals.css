@@ -33,6 +33,62 @@ body {
   color: #121212;
 }
 
+@view-transition {
+  navigation: auto;
+}
+
+@keyframes workspace-view-in {
+  from {
+    opacity: 0;
+    transform: scale(1.012) translateZ(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+
+@keyframes workspace-view-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.994) translateZ(0);
+  }
+}
+
+.workspace-view {
+  view-transition-name: workspace;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-group(workspace) {
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(workspace) {
+  animation: workspace-view-out 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  backface-visibility: hidden;
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+::view-transition-new(workspace) {
+  animation: workspace-view-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  backface-visibility: hidden;
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
 @layer utilities {
   .no-scrollbar {
     scrollbar-width: none;
@@ -41,5 +97,14 @@ body {
 
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-old(workspace),
+  ::view-transition-new(workspace) {
+    animation: none;
   }
 }

@@ -1,8 +1,13 @@
+import { randomBytes } from 'node:crypto';
 import { resolve } from 'node:path';
 import { config as loadEnv } from 'dotenv';
+import { hashPassword } from './password';
 
 loadEnv({ path: resolve(__dirname, '.env') });
 loadEnv({ path: resolve(__dirname, '../.env') });
+
+const ADMIN_EMAIL = 'admin@radiantregalia.co.ke';
+const ADMIN_NAME = 'Radiant Regalia Administrator';
 
 const TENANTS = [
   { businessName: 'Aura Boutique', slug: 'aura-boutique' },
@@ -61,6 +66,45 @@ async function main(): Promise<void> {
         create: categoryData
       });
       categoryRecords.push(category);
+    }
+
+    const configuredAdminPassword = process.env.ADMIN_PASSWORD;
+    const existingAdmin = await prisma.user.findUnique({ where: { email: ADMIN_EMAIL } });
+    let generatedAdminPassword: string | null = null;
+    let adminPasswordHash = existingAdmin?.passwordHash ?? null;
+
+    if (configuredAdminPassword) {
+      if (configuredAdminPassword.length < 12) {
+        throw new Error('ADMIN_PASSWORD must be at least 12 characters.');
+      }
+      adminPasswordHash = hashPassword(configuredAdminPassword);
+    } else if (!adminPasswordHash) {
+      generatedAdminPassword = randomBytes(18).toString('base64url');
+      adminPasswordHash = hashPassword(generatedAdminPassword);
+    }
+
+    const admin = existingAdmin
+      ? await prisma.user.update({
+          where: { email: ADMIN_EMAIL },
+          data: {
+            name: ADMIN_NAME,
+            role: 'ADMIN',
+            passwordHash: adminPasswordHash
+          }
+        })
+      : await prisma.user.create({
+          data: {
+            email: ADMIN_EMAIL,
+            name: ADMIN_NAME,
+            role: 'ADMIN',
+            passwordHash: adminPasswordHash
+          }
+        });
+
+    if (admin.email !== ADMIN_EMAIL || admin.role !== 'ADMIN' || !admin.passwordHash) {
+      throw new Error(
+        'Admin account validation failed: expected the primary admin row to have the ADMIN role and a password hash.'
+      );
     }
 
     let productCount = 0;
@@ -133,6 +177,10 @@ async function main(): Promise<void> {
       }
     }
 
+    console.log(`Admin account ready: ${admin.email} (${admin.role}).`);
+    if (generatedAdminPassword) {
+      console.log(`Generated admin password: ${generatedAdminPassword}`);
+    }
     console.log(
       `Seed complete: ${tenantRecords.length} tenants, ${categoryRecords.length} categories, ` +
         `${productCount} products, ${variantCount} variants.`

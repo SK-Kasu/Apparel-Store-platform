@@ -6,6 +6,7 @@ import { ProductHero } from "@/components/product-hero";
 import { Recommendations } from "@/components/recommendations";
 import { TopBar } from "@/components/top-bar";
 import { TrustBanner } from "@/components/trust-banner";
+import { runViewTransition } from "@/lib/view-transition";
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("Outerwear");
@@ -27,24 +28,28 @@ export default function Home() {
     });
   };
 
+  const handleSelectCategory = (category: string) => {
+    runViewTransition(() => setActiveCategory(category));
+  };
+
   const addToBag = () => {
-    setBagCount((count) => count + 1);
+    runViewTransition(() => setBagCount((count) => count + 1));
   };
 
   return (
     <div className="min-h-screen bg-ink text-zinc-100">
       <Sidebar
         activeCategory={activeCategory}
-        onSelectCategory={setActiveCategory}
+        onSelectCategory={handleSelectCategory}
         department={department}
         onSelectDepartment={setDepartment}
       />
 
       <div className="lg:pl-[280px]">
         <TopBar favoriteCount={favoriteIds.size} bagCount={bagCount} />
-        <MobileNav activeCategory={activeCategory} onSelectCategory={setActiveCategory} />
+        <MobileNav activeCategory={activeCategory} onSelectCategory={handleSelectCategory} />
 
-        <main className="mx-auto w-full max-w-[1480px] px-4 pb-10 pt-5 sm:px-6 lg:px-8 xl:px-10">
+        <main className="workspace-view mx-auto w-full max-w-[1480px] px-4 pb-10 pt-5 sm:px-6 lg:px-8 xl:px-10">
           <div className="mb-5 flex items-center justify-between gap-4">
             <p className="text-[9px] uppercase tracking-[0.28em] text-zinc-600">
               {department} / {activeCategory} / Trench
