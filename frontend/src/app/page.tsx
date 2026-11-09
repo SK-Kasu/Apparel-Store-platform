@@ -200,7 +200,7 @@ export default function Home() {
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      <div className="lg:pl-[280px]">
+      <div className="animate-fade-in lg:pl-[280px]">
         <TopBar
           favoriteCount={favoriteIds.size}
           bagCount={cartCount}

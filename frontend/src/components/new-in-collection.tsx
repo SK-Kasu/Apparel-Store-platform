@@ -316,7 +316,7 @@ export function NewInCollection({ isProcessing, onAddToBag, onBuyNow }: NewInCol
             type="button"
             onClick={() => setSelectedProduct(null)}
             aria-label="Close quick view"
-            className="animate-fade-in absolute inset-0 bg-black/65 backdrop-blur-sm"
+            className="animate-overlay-in absolute inset-0 bg-black/65 backdrop-blur-sm"
           />
 
           <div className="animate-modal-in relative z-10 flex max-h-[92vh] w-full max-w-5xl flex-col overflow-y-auto rounded-t-3xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-[#141414] sm:rounded-3xl">
