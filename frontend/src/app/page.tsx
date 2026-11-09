@@ -74,8 +74,8 @@ export default function Home() {
           <TrustBanner />
 
           <footer className="mt-8 flex flex-col gap-2 border-t border-white/[0.06] pt-6 text-[9px] uppercase tracking-[0.22em] text-zinc-600 sm:flex-row sm:items-center sm:justify-between">
-            <p>Daylog Studio — Modern essentials</p>
-            <p>Designed in Copenhagen · Shipped worldwide</p>
+            <p>Radiant Regalia Collection — Modern essentials</p>
+            <p>All under one roof · Shipped worldwide</p>
           </footer>
         </main>
       </div>

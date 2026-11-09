@@ -51,11 +51,15 @@ export function Sidebar({
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-[280px] flex-col border-r border-white/[0.06] bg-[#151515] px-5 py-6 lg:flex">
       <div className="flex items-center gap-3 px-1">
         <div className="flex h-11 w-11 items-center justify-center rounded-full border border-sand/40 font-serif text-xl text-sand">
-          D
+          R
         </div>
         <div>
-          <p className="font-serif text-[28px] leading-none tracking-tight text-cream">Daylog</p>
-          <p className="mt-1 text-[8px] uppercase tracking-[0.38em] text-zinc-500">Atelier</p>
+          <p className="max-w-[170px] font-serif text-[19px] leading-[1.02] tracking-tight text-cream">
+            Radiant Regalia Collection
+          </p>
+          <p className="mt-1.5 text-[8px] uppercase tracking-[0.32em] text-zinc-500">
+            All under one roof
+          </p>
         </div>
       </div>
 
@@ -126,7 +130,7 @@ export function Sidebar({
           </button>
         </div>
         <p className="mt-5 px-1 text-[9px] uppercase tracking-[0.22em] text-zinc-600">
-          © 2026 Daylog Studio
+          © 2026 Radiant Regalia Collection
         </p>
       </div>
     </aside>

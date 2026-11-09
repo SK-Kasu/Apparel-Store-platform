@@ -43,6 +43,10 @@ export function ProductHero({
             <br />
             <span className="text-sand-soft">Trench Coat</span>
           </h1>
+          <p className="mt-4 flex items-center gap-2 text-[9px] uppercase tracking-[0.32em] text-zinc-500">
+            <span className="h-px w-6 bg-sand/60" />
+            All under one roof
+          </p>
           <p className="mt-6 max-w-md font-serif text-lg italic leading-relaxed text-zinc-400 sm:text-xl">
             A fluid, double-breasted trench cut from brushed cotton twill. Softly structured,
             generously proportioned, and finished with hand-polished hardware.
@@ -138,7 +142,7 @@ export function ProductHero({
         <div className="relative min-h-[520px] overflow-hidden bg-[#202020] lg:min-h-[700px]">
           <Image
             src="/products/trench-coat.jpg"
-            alt="Beige trench coat styled for the Daylog spring collection"
+            alt="Beige trench coat styled for the Radiant Regalia Collection spring edit"
             fill
             priority
             sizes="(min-width: 1024px) 48vw, 100vw"

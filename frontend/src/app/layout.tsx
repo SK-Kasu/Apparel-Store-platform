@@ -19,10 +19,30 @@ const cormorant = Cormorant_Garamond({
   style: ["normal", "italic"]
 });
 
+const brandName = "Radiant Regalia Collection";
+const brandMotto = "All under one roof";
+const brandTitle = `${brandName} - ${brandMotto}`;
+const brandDescription = `${brandTitle}. A considered collection of modern essentials, softly tailored for everyday dressing.`;
+
 export const metadata: Metadata = {
-  title: "Daylog — Modern Essentials",
-  description:
-    "A considered collection of modern essentials, softly tailored for everyday dressing."
+  title: {
+    default: brandTitle,
+    template: `%s | ${brandTitle}`
+  },
+  description: brandDescription,
+  applicationName: brandName,
+  keywords: [brandName, brandMotto, "modern essentials", "apparel", "Radiant Regalia Collection atelier"],
+  openGraph: {
+    title: brandTitle,
+    description: brandDescription,
+    siteName: brandName,
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: brandTitle,
+    description: brandDescription
+  }
 };
 
 export default function RootLayout({

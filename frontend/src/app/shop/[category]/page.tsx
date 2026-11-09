@@ -18,15 +18,15 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
   if (!isCategorySlug(normalized)) {
     return {
-      title: "Category not found — Daylog"
+      title: "Category not found"
     };
   }
 
   const catalog = CATEGORY_CATALOG[normalized];
 
   return {
-    title: `${catalog.label} — Daylog`,
-    description: catalog.description
+    title: catalog.label,
+    description: `${catalog.description} All under one roof at Radiant Regalia Collection.`
   };
 }
 

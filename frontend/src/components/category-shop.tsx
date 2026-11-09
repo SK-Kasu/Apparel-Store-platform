@@ -295,8 +295,8 @@ export function CategoryShop({ catalog }: CategoryShopProps) {
           </section>
 
           <footer className="mt-10 flex flex-col gap-2 border-t border-white/[0.06] pt-6 text-[9px] uppercase tracking-[0.22em] text-zinc-600 sm:flex-row sm:items-center sm:justify-between">
-            <p>Daylog Studio — Modern essentials</p>
-            <p>Complimentary shipping over KSh 10,000</p>
+            <p>Radiant Regalia Collection — Modern essentials</p>
+            <p>All under one roof · Complimentary shipping over KSh 10,000</p>
           </footer>
         </main>
       </div>
