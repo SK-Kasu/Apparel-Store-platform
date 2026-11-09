@@ -37,6 +37,7 @@ const CHECKOUT_VARIANT_ID =
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("Outerwear");
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [department, setDepartment] = useState<Department>("Women");
   const [activeColor, setActiveColor] = useState("Beige");
   const [activeSize, setActiveSize] = useState("M");
@@ -79,6 +80,14 @@ export default function Home() {
 
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isSidebarOpen]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle("dark", isDarkMode);
+    root.classList.toggle("light", !isDarkMode);
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode((current) => !current);
 
   const toggleFavorite = (id: string) => {
     setFavoriteIds((current) => {
@@ -167,7 +176,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-ink text-zinc-100">
+    <div className="min-h-screen bg-ink text-zinc-900 dark:text-zinc-100">
       <Sidebar
         activeCategory={activeCategory}
         onSelectCategory={selectCategory}
@@ -181,16 +190,18 @@ export default function Home() {
         <TopBar
           favoriteCount={favoriteIds.size}
           bagCount={cartCount}
+          isDarkMode={isDarkMode}
+          onToggleTheme={toggleTheme}
           onOpenSidebar={() => setIsSidebarOpen(true)}
         />
         <MobileNav activeCategory={activeCategory} onSelectCategory={selectCategory} />
 
         <main className="mx-auto w-full max-w-[1480px] px-4 pb-10 pt-5 sm:px-6 lg:px-8 xl:px-10">
           <div className="mb-5 flex items-center justify-between gap-4">
-            <p className="text-[9px] uppercase tracking-[0.28em] text-zinc-600">
+            <p className="text-[9px] uppercase tracking-[0.28em] text-faint">
               {department} / {activeCategory} / Trench
             </p>
-            <p className="hidden text-[9px] uppercase tracking-[0.28em] text-zinc-600 sm:block">
+            <p className="hidden text-[9px] uppercase tracking-[0.28em] text-faint sm:block">
               Complimentary shipping over $100
             </p>
           </div>
@@ -215,7 +226,7 @@ export default function Home() {
 
           <TrustBanner />
 
-          <footer className="mt-8 flex flex-col gap-2 border-t border-white/[0.06] pt-6 text-[9px] uppercase tracking-[0.22em] text-zinc-600 sm:flex-row sm:items-center sm:justify-between">
+          <footer className="mt-8 flex flex-col gap-2 border-t border-line pt-6 text-[9px] uppercase tracking-[0.22em] text-faint sm:flex-row sm:items-center sm:justify-between">
             <p>Radiant Regalia — Modern essentials</p>
             <p>Designed in Copenhagen · Shipped worldwide</p>
           </footer>
@@ -236,11 +247,11 @@ export default function Home() {
           id="radiant-regalia-support"
           aria-label="Radiant Regalia support"
           aria-hidden={!isChatOpen}
-          className={`pointer-events-auto absolute inset-y-0 right-0 flex w-full max-w-[420px] flex-col border-l border-white/[0.08] bg-[#101010] shadow-[-40px_0_100px_-30px_rgba(0,0,0,0.9)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          className={`pointer-events-auto absolute inset-y-0 right-0 flex w-full max-w-[420px] flex-col border-l border-line bg-white dark:bg-[#101010] shadow-[-40px_0_100px_-30px_rgba(0,0,0,0.9)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
             isChatOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          <div className="flex items-center justify-between border-b border-white/[0.07] px-5 py-5">
+          <div className="flex items-center justify-between border-b border-line px-5 py-5">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full border border-sand/30 bg-sand/[0.08] text-sand">
                 <Sparkles size={18} strokeWidth={1.6} />
@@ -249,7 +260,7 @@ export default function Home() {
                 <p className="font-serif text-2xl leading-none text-cream">
                   Radiant Regalia Concierge
                 </p>
-                <p className="mt-1 text-[8px] uppercase tracking-[0.3em] text-zinc-500">
+                <p className="mt-1 text-[8px] uppercase tracking-[0.3em] text-subtle">
                   Personal styling · AI
                 </p>
               </div>
@@ -258,13 +269,13 @@ export default function Home() {
               type="button"
               onClick={() => setIsChatOpen(false)}
               aria-label="Close support panel"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.08] text-zinc-400 transition hover:border-sand/40 hover:text-sand"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-muted transition hover:border-sand/40 hover:text-sand"
             >
               <X size={17} />
             </button>
           </div>
 
-          <div className="flex items-center gap-2 border-b border-white/[0.06] px-5 py-3 text-[9px] uppercase tracking-[0.22em] text-zinc-500">
+          <div className="flex items-center gap-2 border-b border-line px-5 py-3 text-[9px] uppercase tracking-[0.22em] text-subtle">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
             Online now
           </div>
@@ -284,8 +295,8 @@ export default function Home() {
                   <div
                     className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                       isUser
-                        ? "rounded-br-md bg-sand text-ink"
-                        : "rounded-bl-md border border-white/[0.08] bg-white/[0.04] text-zinc-200"
+                        ? "rounded-br-md bg-sand text-accent-ink"
+                        : "rounded-bl-md border border-line bg-black/[0.04] dark:bg-white/[0.04] text-zinc-800 dark:text-zinc-200"
                     }`}
                   >
                     {message.text}
@@ -301,7 +312,7 @@ export default function Home() {
                     key={prompt}
                     type="button"
                     onClick={() => setChatInput(prompt)}
-                    className="rounded-xl border border-white/[0.08] px-3.5 py-3 text-left text-xs text-zinc-400 transition hover:border-sand/40 hover:bg-sand/[0.04] hover:text-cream"
+                    className="rounded-xl border border-line px-3.5 py-3 text-left text-xs text-muted transition hover:border-sand/40 hover:bg-sand/[0.04] hover:text-cream"
                   >
                     {prompt}
                   </button>
@@ -310,8 +321,8 @@ export default function Home() {
             ) : null}
           </div>
 
-          <form onSubmit={handleChatSubmit} className="border-t border-white/[0.07] p-4">
-            <div className="flex items-center gap-2 rounded-2xl border border-white/[0.09] bg-white/[0.03] p-2 transition focus-within:border-sand/50">
+          <form onSubmit={handleChatSubmit} className="border-t border-line p-4">
+            <div className="flex items-center gap-2 rounded-2xl border border-line bg-black/[0.03] dark:bg-white/[0.03] p-2 transition focus-within:border-sand/50">
               <label htmlFor="support-message" className="sr-only">
                 Ask the Radiant Regalia support team
               </label>
@@ -320,18 +331,18 @@ export default function Home() {
                 value={chatInput}
                 onChange={(event) => setChatInput(event.target.value)}
                 placeholder="Ask about fit, fabric, or availability..."
-                className="h-11 min-w-0 flex-1 bg-transparent px-3 text-sm text-zinc-200 outline-none placeholder:text-zinc-600"
+                className="h-11 min-w-0 flex-1 bg-transparent px-3 text-sm text-zinc-800 dark:text-zinc-200 outline-none placeholder:text-faint"
               />
               <button
                 type="submit"
                 disabled={!chatInput.trim()}
                 aria-label="Send message"
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sand text-ink transition hover:bg-[#E0B68E] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sand text-accent-ink transition hover:bg-[#E0B68E] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <Send size={17} strokeWidth={1.8} />
               </button>
             </div>
-            <p className="mt-2 text-center text-[8px] uppercase tracking-[0.2em] text-zinc-600">
+            <p className="mt-2 text-center text-[8px] uppercase tracking-[0.2em] text-faint">
               AI styling advice · Availability may change
             </p>
           </form>
@@ -343,7 +354,7 @@ export default function Home() {
         onClick={() => setIsChatOpen(true)}
         aria-expanded={isChatOpen}
         aria-controls="radiant-regalia-support"
-        className={`fixed bottom-5 right-5 z-40 flex h-14 items-center gap-2.5 rounded-full border border-sand/30 bg-[#171513]/95 px-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-cream shadow-[0_18px_50px_-15px_rgba(0,0,0,0.9)] backdrop-blur-xl transition duration-300 hover:border-sand/60 hover:text-sand ${
+        className={`fixed bottom-5 right-5 z-40 flex h-14 items-center gap-2.5 rounded-full border border-sand/30 bg-white/95 dark:bg-[#171513]/95 px-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-cream shadow-[0_18px_50px_-15px_rgba(0,0,0,0.9)] backdrop-blur-xl transition duration-300 hover:border-sand/60 hover:text-sand ${
           isChatOpen ? "pointer-events-none translate-y-4 opacity-0" : "translate-y-0 opacity-100"
         }`}
       >

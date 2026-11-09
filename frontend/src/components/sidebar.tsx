@@ -61,11 +61,11 @@ function SidebarContent({
           <p className="font-serif text-[24px] leading-none tracking-tight text-cream">
             Radiant Regalia
           </p>
-          <p className="mt-1 text-[8px] uppercase tracking-[0.38em] text-zinc-500">Atelier</p>
+          <p className="mt-1 text-[8px] uppercase tracking-[0.38em] text-subtle">Atelier</p>
         </div>
       </div>
 
-      <div className="mt-8 flex rounded-full border border-white/[0.08] bg-black/20 p-1">
+      <div className="mt-8 flex rounded-full border border-line bg-black/[0.04] dark:bg-black/20 p-1">
         {(["Women", "Men"] as const).map((option) => (
           <button
             key={option}
@@ -74,8 +74,8 @@ function SidebarContent({
             aria-pressed={department === option}
             className={`flex-1 rounded-full py-2.5 text-[10px] font-semibold uppercase tracking-[0.22em] transition ${
               department === option
-                ? "bg-sand text-ink shadow-sm"
-                : "text-zinc-500 hover:text-zinc-200"
+                ? "bg-sand text-accent-ink shadow-sm"
+                : "text-subtle hover:text-zinc-800 dark:hover:text-zinc-200"
             }`}
           >
             {option}
@@ -96,13 +96,13 @@ function SidebarContent({
               className={`group flex items-center gap-3 rounded-full px-4 py-3 text-left text-sm transition ${
                 active
                   ? "border border-sand/60 bg-sand/10 text-cream shadow-[inset_0_0_0_1px_rgba(212,163,115,0.08)]"
-                  : "border border-transparent text-zinc-500 hover:bg-white/[0.04] hover:text-zinc-200"
+                  : "border border-transparent text-subtle hover:bg-black/[0.04] dark:hover:bg-white/[0.04] hover:text-zinc-800 dark:hover:text-zinc-200"
               }`}
             >
               <Icon
                 size={17}
                 strokeWidth={1.6}
-                className={active ? "text-sand" : "text-zinc-500 group-hover:text-zinc-300"}
+                className={active ? "text-sand" : "text-subtle group-hover:text-zinc-700 dark:group-hover:text-zinc-300"}
               />
               <span className="flex-1 tracking-wide">{label}</span>
               {active ? <span className="h-1.5 w-1.5 rounded-full bg-sand" /> : null}
@@ -112,7 +112,7 @@ function SidebarContent({
       </nav>
 
       <div className="mt-auto pt-8">
-        <div className="relative overflow-hidden rounded-2xl border border-sand/15 bg-[#1C1916] p-5">
+        <div className="relative overflow-hidden rounded-2xl border border-sand/15 bg-[#efe6d8] dark:bg-[#1C1916] p-5">
           <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-sand/20 blur-3xl" />
           <div className="absolute -bottom-12 -left-8 h-28 w-28 rounded-full border border-sand/10" />
           <p className="relative text-[9px] uppercase tracking-[0.3em] text-sand">
@@ -126,12 +126,12 @@ function SidebarContent({
           <button
             type="button"
             aria-label="Explore the Spring Collection"
-            className="relative mt-5 flex h-10 w-10 items-center justify-center rounded-full border border-sand/40 text-sand transition hover:bg-sand hover:text-ink"
+            className="relative mt-5 flex h-10 w-10 items-center justify-center rounded-full border border-sand/40 text-sand transition hover:bg-sand hover:text-accent-ink"
           >
             <ChevronRight size={17} />
           </button>
         </div>
-        <p className="mt-5 px-1 text-[9px] uppercase tracking-[0.22em] text-zinc-600">
+        <p className="mt-5 px-1 text-[9px] uppercase tracking-[0.22em] text-faint">
           © 2026 Radiant Regalia Studio
         </p>
       </div>
@@ -162,7 +162,7 @@ export function Sidebar({
 
   return (
     <>
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[280px] flex-col border-r border-white/[0.06] bg-[#151515] px-5 py-6 lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[280px] flex-col border-r border-line bg-[#f1ece2] dark:bg-[#151515] px-5 py-6 lg:flex">
         <SidebarContent
           activeCategory={activeCategory}
           onSelectCategory={onSelectCategory}
@@ -188,7 +188,7 @@ export function Sidebar({
         <aside
           id="mobile-navigation"
           aria-label="Shop navigation"
-          className={`absolute inset-y-0 left-0 flex w-[280px] max-w-[85vw] flex-col border-r border-white/[0.06] bg-[#151515] px-5 py-6 shadow-2xl transition-transform duration-300 ease-out ${
+          className={`absolute inset-y-0 left-0 flex w-[280px] max-w-[85vw] flex-col border-r border-line bg-[#f1ece2] dark:bg-[#151515] px-5 py-6 shadow-2xl transition-transform duration-300 ease-out ${
             isOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -197,7 +197,7 @@ export function Sidebar({
               type="button"
               onClick={onClose}
               aria-label="Close navigation menu"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.08] text-zinc-400 transition hover:border-sand/40 hover:text-sand"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-muted transition hover:border-sand/40 hover:text-sand"
             >
               <X size={17} />
             </button>
@@ -220,7 +220,7 @@ export function MobileNav({
 }: Pick<NavigationProps, "activeCategory" | "onSelectCategory">) {
   return (
     <nav
-      className="flex gap-2 overflow-x-auto border-b border-white/[0.06] px-4 py-3 no-scrollbar lg:hidden"
+      className="flex gap-2 overflow-x-auto border-b border-line px-4 py-3 no-scrollbar lg:hidden"
       aria-label="Shop categories"
     >
       {NAV_ITEMS.map(({ label, icon: Icon }) => {
@@ -234,10 +234,10 @@ export function MobileNav({
             className={`flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-[11px] transition ${
               active
                 ? "border-sand/60 bg-sand/10 text-cream"
-                : "border-white/[0.07] text-zinc-500"
+                : "border-line text-subtle"
             }`}
           >
-            <Icon size={14} strokeWidth={1.7} className={active ? "text-sand" : "text-zinc-500"} />
+            <Icon size={14} strokeWidth={1.7} className={active ? "text-sand" : "text-subtle"} />
             {label}
           </button>
         );

@@ -36,7 +36,7 @@ export function Recommendations({
             type="button"
             onClick={() => scroll(-1)}
             aria-label="Scroll recommendations left"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.08] text-zinc-500 transition hover:border-sand/40 hover:text-sand"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-subtle transition hover:border-sand/40 hover:text-sand"
           >
             <ChevronLeft size={17} />
           </button>
@@ -44,7 +44,7 @@ export function Recommendations({
             type="button"
             onClick={() => scroll(1)}
             aria-label="Scroll recommendations right"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.08] text-zinc-500 transition hover:border-sand/40 hover:text-sand"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-subtle transition hover:border-sand/40 hover:text-sand"
           >
             <ChevronRight size={17} />
           </button>
