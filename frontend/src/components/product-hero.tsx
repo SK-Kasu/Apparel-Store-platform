@@ -8,20 +8,24 @@ type ProductHeroProps = {
   activeColor: string;
   activeSize: string;
   isFavorite: boolean;
+  isProcessing: boolean;
   onSelectColor: (color: string) => void;
   onSelectSize: (size: string) => void;
   onToggleFavorite: () => void;
   onAddToBag: () => void;
+  onBuyNow: () => void;
 };
 
 export function ProductHero({
   activeColor,
   activeSize,
   isFavorite,
+  isProcessing,
   onSelectColor,
   onSelectSize,
   onToggleFavorite,
-  onAddToBag
+  onAddToBag,
+  onBuyNow
 }: ProductHeroProps) {
   return (
     <section className="overflow-hidden rounded-[2rem] border border-white/[0.07] bg-panel shadow-[0_30px_120px_-40px_rgba(0,0,0,0.9)]">
@@ -210,9 +214,12 @@ export function ProductHero({
             </button>
             <button
               type="button"
-              className="h-14 rounded-2xl border border-white/[0.14] bg-transparent px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-cream transition hover:border-sand/50 hover:bg-white/[0.03] hover:text-sand"
+              onClick={onBuyNow}
+              disabled={isProcessing}
+              aria-busy={isProcessing}
+              className="h-14 rounded-2xl border border-white/[0.14] bg-transparent px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-cream transition hover:border-sand/50 hover:bg-white/[0.03] hover:text-sand disabled:cursor-wait disabled:opacity-70"
             >
-              Buy Now
+              {isProcessing ? "Processing Transaction..." : "Buy Now"}
             </button>
           </div>
         </div>

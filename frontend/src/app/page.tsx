@@ -28,6 +28,13 @@ const INITIAL_MESSAGES: SupportMessage[] = [
   }
 ];
 
+const CHECKOUT_TENANT_ID =
+  process.env.NEXT_PUBLIC_CHECKOUT_TENANT_ID ?? "00000000-0000-4000-8000-000000000001";
+const CHECKOUT_PRODUCT_ID =
+  process.env.NEXT_PUBLIC_CHECKOUT_PRODUCT_ID ?? "00000000-0000-4000-8000-000000000101";
+const CHECKOUT_VARIANT_ID =
+  process.env.NEXT_PUBLIC_CHECKOUT_VARIANT_ID ?? "00000000-0000-4000-8000-000000000201";
+
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("Outerwear");
   const [department, setDepartment] = useState<Department>("Women");
@@ -35,6 +42,7 @@ export default function Home() {
   const [activeSize, setActiveSize] = useState("M");
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(() => new Set());
   const [cartCount, setCartCount] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
@@ -86,6 +94,44 @@ export default function Home() {
 
   const addToBag = () => {
     setCartCount((prev) => prev + 1);
+  };
+
+  const handleCheckout = async () => {
+    if (isProcessing) {
+      return;
+    }
+
+    setIsProcessing(true);
+
+    const item = {
+      tenantId: CHECKOUT_TENANT_ID,
+      productId: CHECKOUT_PRODUCT_ID,
+      variantId: `${CHECKOUT_VARIANT_ID}-${activeColor.toLowerCase()}-${activeSize.toLowerCase()}`,
+      quantity: 1
+    };
+
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          ...item,
+          items: [item]
+        })
+      });
+
+      if (response.ok || response.status === 200) {
+        window.alert(
+          "Order successfully secured! Check the Admin Analytics panel to verify live metrics tracking."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const selectCategory = (category: string) => {
@@ -153,10 +199,12 @@ export default function Home() {
             activeColor={activeColor}
             activeSize={activeSize}
             isFavorite={favoriteIds.has("hero-trench")}
+            isProcessing={isProcessing}
             onSelectColor={setActiveColor}
             onSelectSize={setActiveSize}
             onToggleFavorite={() => toggleFavorite("hero-trench")}
             onAddToBag={addToBag}
+            onBuyNow={handleCheckout}
           />
 
           <Recommendations
