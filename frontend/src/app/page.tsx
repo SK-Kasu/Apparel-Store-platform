@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Send, Sparkles, X } from "lucide-react";
 import { Footer } from "@/components/footer";
+import { NewInCollection, type NewInProduct } from "@/components/new-in-collection";
 import { MobileNav, Sidebar, type Department } from "@/components/sidebar";
 import { ProductHero } from "@/components/product-hero";
 import { Recommendations } from "@/components/recommendations";
@@ -106,7 +107,7 @@ export default function Home() {
     setCartCount((prev) => prev + 1);
   };
 
-  const handleCheckout = async () => {
+  const submitCheckout = async (productId: string, variantId: string) => {
     if (isProcessing) {
       return;
     }
@@ -115,8 +116,8 @@ export default function Home() {
 
     const item = {
       tenantId: CHECKOUT_TENANT_ID,
-      productId: CHECKOUT_PRODUCT_ID,
-      variantId: `${CHECKOUT_VARIANT_ID}-${activeColor.toLowerCase()}-${activeSize.toLowerCase()}`,
+      productId,
+      variantId,
       quantity: 1
     };
 
@@ -143,6 +144,18 @@ export default function Home() {
       setIsProcessing(false);
     }
   };
+
+  const handleCheckout = () =>
+    submitCheckout(
+      CHECKOUT_PRODUCT_ID,
+      `${CHECKOUT_VARIANT_ID}-${activeColor.toLowerCase()}-${activeSize.toLowerCase()}`
+    );
+
+  const handleCollectionBuyNow = (product: NewInProduct, size: string, color: string) =>
+    submitCheckout(
+      product.id,
+      `${CHECKOUT_VARIANT_ID}-${product.id}-${color.toLowerCase().replace(/\s+/g, "-")}-${size.toLowerCase()}`
+    );
 
   const selectCategory = (category: string) => {
     setActiveCategory(category);
@@ -217,6 +230,12 @@ export default function Home() {
             onToggleFavorite={() => toggleFavorite("hero-trench")}
             onAddToBag={addToBag}
             onBuyNow={handleCheckout}
+          />
+
+          <NewInCollection
+            isProcessing={isProcessing}
+            onAddToBag={addToBag}
+            onBuyNow={handleCollectionBuyNow}
           />
 
           <Recommendations

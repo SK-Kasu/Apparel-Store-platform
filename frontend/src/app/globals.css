@@ -72,6 +72,26 @@ body {
   color: #121212;
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @layer utilities {
   .no-scrollbar {
     scrollbar-width: none;
@@ -80,5 +100,20 @@ body {
 
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 200ms ease-out both;
+  }
+
+  .animate-modal-in {
+    animation: modal-in 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-modal-in {
+    animation: none;
   }
 }
