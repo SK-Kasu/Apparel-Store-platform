@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
   ChevronRight,
@@ -12,28 +13,30 @@ import {
   ShoppingBag,
   Sparkles
 } from "lucide-react";
+import { categoryHref, type CategorySlug } from "@/lib/categories";
 
 export type Department = "Women" | "Men";
 
 type NavItem = {
   label: string;
+  slug: CategorySlug;
   icon: LucideIcon;
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: "New In", icon: Sparkles },
-  { label: "Dresses", icon: PersonStanding },
-  { label: "Tops", icon: Shirt },
-  { label: "Outerwear", icon: Layers },
-  { label: "Pants", icon: Ruler },
-  { label: "Shoes", icon: Footprints },
-  { label: "Bags", icon: ShoppingBag },
-  { label: "Accessories", icon: Gem }
+  { label: "New In", slug: "new-in", icon: Sparkles },
+  { label: "Dresses", slug: "dresses", icon: PersonStanding },
+  { label: "Tops", slug: "tops", icon: Shirt },
+  { label: "Outerwear", slug: "outerwear", icon: Layers },
+  { label: "Pants", slug: "pants", icon: Ruler },
+  { label: "Shoes", slug: "shoes", icon: Footprints },
+  { label: "Bags", slug: "bags", icon: ShoppingBag },
+  { label: "Accessories", slug: "accessories", icon: Gem }
 ];
 
 type NavigationProps = {
   activeCategory: string;
-  onSelectCategory: (category: string) => void;
+  onSelectCategory?: (category: string) => void;
   department: Department;
   onSelectDepartment: (department: Department) => void;
 };
@@ -75,14 +78,14 @@ export function Sidebar({
       </div>
 
       <nav className="mt-8 flex flex-1 flex-col gap-1.5" aria-label="Shop categories">
-        {NAV_ITEMS.map(({ label, icon: Icon }) => {
+        {NAV_ITEMS.map(({ label, slug, icon: Icon }) => {
           const active = activeCategory === label;
 
           return (
-            <button
+            <Link
               key={label}
-              type="button"
-              onClick={() => onSelectCategory(label)}
+              href={categoryHref(slug)}
+              onClick={() => onSelectCategory?.(label)}
               aria-current={active ? "page" : undefined}
               className={`group flex items-center gap-3 rounded-full px-4 py-3 text-left text-sm transition ${
                 active
@@ -97,7 +100,7 @@ export function Sidebar({
               />
               <span className="flex-1 tracking-wide">{label}</span>
               {active ? <span className="h-1.5 w-1.5 rounded-full bg-sand" /> : null}
-            </button>
+            </Link>
           );
         })}
       </nav>
@@ -136,14 +139,14 @@ export function MobileNav({ activeCategory, onSelectCategory }: Pick<NavigationP
       className="flex gap-2 overflow-x-auto border-b border-white/[0.06] px-4 py-3 no-scrollbar lg:hidden"
       aria-label="Shop categories"
     >
-      {NAV_ITEMS.map(({ label, icon: Icon }) => {
+      {NAV_ITEMS.map(({ label, slug, icon: Icon }) => {
         const active = activeCategory === label;
 
         return (
-          <button
+          <Link
             key={label}
-            type="button"
-            onClick={() => onSelectCategory(label)}
+            href={categoryHref(slug)}
+            onClick={() => onSelectCategory?.(label)}
             className={`flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-[11px] transition ${
               active
                 ? "border-sand/60 bg-sand/10 text-cream"
@@ -152,7 +155,7 @@ export function MobileNav({ activeCategory, onSelectCategory }: Pick<NavigationP
           >
             <Icon size={14} strokeWidth={1.7} className={active ? "text-sand" : "text-zinc-500"} />
             {label}
-          </button>
+          </Link>
         );
       })}
     </nav>

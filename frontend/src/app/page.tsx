@@ -6,6 +6,7 @@ import { ProductHero } from "@/components/product-hero";
 import { Recommendations } from "@/components/recommendations";
 import { TopBar } from "@/components/top-bar";
 import { TrustBanner } from "@/components/trust-banner";
+import { useBagCount } from "@/lib/use-bag-count";
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("Outerwear");
@@ -13,7 +14,11 @@ export default function Home() {
   const [selectedColor, setSelectedColor] = useState("Beige");
   const [selectedSize, setSelectedSize] = useState("M");
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(() => new Set());
-  const [bagCount, setBagCount] = useState(0);
+  const { bagCount, addToBag } = useBagCount();
+
+  const handleAddToBag = () => {
+    addToBag();
+  };
 
   const toggleFavorite = (id: string) => {
     setFavoriteIds((current) => {
@@ -25,10 +30,6 @@ export default function Home() {
       }
       return next;
     });
-  };
-
-  const addToBag = () => {
-    setBagCount((count) => count + 1);
   };
 
   return (
@@ -61,13 +62,13 @@ export default function Home() {
             onSelectColor={setSelectedColor}
             onSelectSize={setSelectedSize}
             onToggleFavorite={() => toggleFavorite("hero-trench")}
-            onAddToBag={addToBag}
+            onAddToBag={handleAddToBag}
           />
 
           <Recommendations
             favoriteIds={favoriteIds}
             onToggleFavorite={toggleFavorite}
-            onAddToBag={addToBag}
+            onAddToBag={handleAddToBag}
           />
 
           <TrustBanner />
