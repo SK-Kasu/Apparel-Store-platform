@@ -195,6 +195,7 @@ export function ProductHero() {
             </div>
             <Link
               href="/shop/new-in"
+              prefetch={true}
               className="flex items-center gap-2 text-[9px] uppercase tracking-[0.22em] text-cream/60 transition hover:text-sand"
             >
               <span>View look</span>

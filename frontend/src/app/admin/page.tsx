@@ -65,6 +65,7 @@ export default function AdminPage() {
             <div className="grid gap-px bg-[var(--inv-border)] sm:grid-cols-2">
               <Link
                 href="/admin/inventory"
+                prefetch={true}
                 className="group flex items-center justify-between gap-4 bg-[var(--inv-panel)] px-5 py-8 transition hover:bg-[var(--inv-panel-soft)]"
               >
                 <div>

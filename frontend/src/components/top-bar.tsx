@@ -43,6 +43,7 @@ export function TopBar() {
 
         <Link
           href="/"
+          prefetch={true}
           className="min-w-0 flex-1 lg:hidden"
           aria-label="Radiant Regalia Collection home"
         >
@@ -89,6 +90,7 @@ export function TopBar() {
         <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2 lg:ml-0">
           <Link
             href="/admin"
+            prefetch={true}
             aria-label="Open admin console"
             className="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.08] text-zinc-300 transition hover:border-sand/40 hover:text-sand"
           >

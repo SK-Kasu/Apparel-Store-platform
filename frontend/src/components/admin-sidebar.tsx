@@ -59,6 +59,7 @@ export function AdminSidebar() {
               <Link
                 key={href}
                 href={href}
+                prefetch={true}
                 aria-current={active ? "page" : undefined}
                 className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm transition ${
                   active
@@ -85,6 +86,7 @@ export function AdminSidebar() {
           </p>
           <Link
             href="/"
+            prefetch={true}
             className="mt-5 flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-[var(--inv-muted)] transition hover:text-[var(--inv-sand)]"
           >
             View storefront
@@ -98,6 +100,7 @@ export function AdminSidebar() {
           <Brand compact />
           <Link
             href="/"
+            prefetch={true}
             className="flex h-9 items-center gap-1.5 rounded-full border border-[var(--inv-border)] px-3 text-[9px] font-semibold uppercase tracking-[0.18em] text-[var(--inv-muted)] transition hover:border-[var(--inv-sand)] hover:text-[var(--inv-sand)]"
           >
             Store
@@ -112,6 +115,7 @@ export function AdminSidebar() {
               <Link
                 key={href}
                 href={href}
+                prefetch={true}
                 aria-current={active ? "page" : undefined}
                 className={`flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-[11px] transition ${
                   active

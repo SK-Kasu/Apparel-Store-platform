@@ -58,6 +58,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="min-w-0">
           <Link
             href={`/shop/${product.categorySlug}`}
+            prefetch={true}
             className="text-[8px] uppercase tracking-[0.26em] text-zinc-600 transition hover:text-sand"
           >
             {product.category}

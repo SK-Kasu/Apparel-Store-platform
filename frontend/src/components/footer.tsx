@@ -55,6 +55,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    prefetch={true}
                     className="text-sm text-zinc-400 transition hover:text-cream"
                   >
                     {link.label}
@@ -73,6 +74,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    prefetch={true}
                     className="text-sm text-zinc-400 transition hover:text-cream"
                   >
                     {link.label}
@@ -149,13 +151,13 @@ export function Footer() {
             Data controller registered with the ODPC · Nairobi, Kenya
           </p>
           <div className="flex gap-4">
-            <Link href="/privacy-policy" className="transition hover:text-sand">
+            <Link href="/privacy-policy" prefetch={true} className="transition hover:text-sand">
               Privacy
             </Link>
-            <Link href="/terms" className="transition hover:text-sand">
+            <Link href="/terms" prefetch={true} className="transition hover:text-sand">
               Terms
             </Link>
-            <Link href="/contact" className="transition hover:text-sand">
+            <Link href="/contact" prefetch={true} className="transition hover:text-sand">
               Contact
             </Link>
           </div>

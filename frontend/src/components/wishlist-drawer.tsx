@@ -83,6 +83,7 @@ export function WishlistDrawer() {
             </p>
             <Link
               href="/shop/new-in"
+              prefetch={true}
               onClick={() => setWishlistOpen(false)}
               className="mt-6 flex h-12 items-center justify-center rounded-full bg-sand px-6 text-[10px] font-semibold uppercase tracking-[0.2em] text-ink transition hover:bg-[#E0B68E]"
             >

@@ -178,6 +178,7 @@ export function CartDrawer() {
             </div>
             <Link
               href="/track-order"
+              prefetch={true}
               onClick={close}
               className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-sand text-[11px] font-semibold uppercase tracking-[0.2em] text-ink transition hover:bg-[#E0B68E]"
             >
@@ -203,6 +204,7 @@ export function CartDrawer() {
             </p>
             <Link
               href="/shop/new-in"
+              prefetch={true}
               onClick={close}
               className="mt-6 flex h-12 items-center justify-center rounded-full bg-sand px-6 text-[10px] font-semibold uppercase tracking-[0.2em] text-ink transition hover:bg-[#E0B68E]"
             >

@@ -49,6 +49,7 @@ export default function CategoryPage() {
             <Link
               key={item.slug}
               href={`/shop/${item.slug}`}
+              prefetch={true}
               aria-current={active ? "page" : undefined}
               className={`flex h-10 shrink-0 items-center rounded-full border px-4 text-[10px] font-semibold uppercase tracking-[0.16em] transition ${
                 active
@@ -100,6 +101,7 @@ export default function CategoryPage() {
                 ) : null}
                 <Link
                   href="/shop/new-in"
+                  prefetch={true}
                   className="flex h-11 items-center rounded-full border border-white/10 px-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-400 transition hover:border-sand/50 hover:text-sand"
                 >
                   Shop new in
@@ -129,6 +131,7 @@ export default function CategoryPage() {
               <Link
                 key={item.slug}
                 href={`/shop/${item.slug}`}
+                prefetch={true}
                 className="flex h-10 items-center rounded-full border border-white/10 px-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-400 transition hover:border-sand/50 hover:text-sand"
               >
                 {item.label}

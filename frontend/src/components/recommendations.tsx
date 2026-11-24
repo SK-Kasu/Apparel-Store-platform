@@ -65,6 +65,7 @@ export function Recommendations() {
           </p>
           <Link
             href="/shop/new-in"
+            prefetch={true}
             className="mt-5 flex h-11 items-center justify-center rounded-full bg-sand px-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-ink transition hover:bg-[#E0B68E]"
           >
             Shop new in

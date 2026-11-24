@@ -51,7 +51,12 @@ function isActivePath(pathname: string, slug: string): boolean {
 
 function Brand() {
   return (
-    <Link href="/" className="flex items-center gap-3 px-1" aria-label="Radiant Regalia Collection home">
+    <Link
+      href="/"
+      prefetch={true}
+      className="flex items-center gap-3 px-1"
+      aria-label="Radiant Regalia Collection home"
+    >
       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-sand/40 font-serif text-xl text-sand">
         R
       </span>
@@ -103,6 +108,7 @@ function CategoryLinks({ onNavigate }: { onNavigate?: () => void }) {
           <Link
             key={slug}
             href={`/shop/${slug}`}
+            prefetch={true}
             onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={`group flex items-center gap-3 rounded-full px-4 py-3 text-left text-sm transition ${
@@ -129,6 +135,7 @@ function PromoCard({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <Link
       href="/shop/new-in"
+      prefetch={true}
       onClick={onNavigate}
       aria-label="Explore the Spring Collection"
       className="group relative block overflow-hidden rounded-2xl border border-sand/15 bg-[#1C1916] p-5 transition hover:border-sand/35"
@@ -235,6 +242,7 @@ export function MobileMenu() {
             <div className="grid grid-cols-2 gap-2">
               <Link
                 href="/track-order"
+                prefetch={true}
                 onClick={close}
                 className="flex h-11 items-center justify-center gap-1.5 rounded-full border border-white/10 text-[9px] font-semibold uppercase tracking-[0.16em] text-zinc-400 transition hover:border-sand/50 hover:text-sand"
               >
@@ -243,6 +251,7 @@ export function MobileMenu() {
               </Link>
               <Link
                 href="/admin"
+                prefetch={true}
                 onClick={close}
                 className="flex h-11 items-center justify-center gap-1.5 rounded-full border border-white/10 text-[9px] font-semibold uppercase tracking-[0.16em] text-zinc-400 transition hover:border-sand/50 hover:text-sand"
               >
@@ -252,6 +261,7 @@ export function MobileMenu() {
             </div>
             <Link
               href="/contact"
+              prefetch={true}
               onClick={close}
               className="flex h-11 items-center justify-center rounded-full border border-white/10 text-[9px] font-semibold uppercase tracking-[0.16em] text-zinc-400 transition hover:border-sand/50 hover:text-sand"
             >

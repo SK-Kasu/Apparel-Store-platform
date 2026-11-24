@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/footer";
+import { NavigationProgress } from "@/components/NavigationProgress";
 import { StoreProvider } from "@/lib/store-context";
 import "./globals.css";
 
@@ -38,6 +39,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} bg-ink text-zinc-100 antialiased`}
       >
         <StoreProvider>
+          <NavigationProgress />
           {children}
           <Footer />
         </StoreProvider>
