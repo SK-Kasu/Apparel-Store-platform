@@ -3,21 +3,21 @@ import { RotateCcw, ShieldCheck, Truck } from "lucide-react";
 const BENEFITS = [
   {
     icon: Truck,
-    title: "Free Shipping",
-    description: "On orders over $100",
-    detail: "Delivered in 2–4 business days"
+    title: "Free Delivery",
+    description: "On orders over KSh 10,000",
+    detail: "Nairobi same-day, countrywide 2–4 days"
   },
   {
     icon: RotateCcw,
     title: "Easy Returns",
-    description: "30-day return policy",
-    detail: "Complimentary collection"
+    description: "14-day return policy",
+    detail: "Complimentary Nairobi collection"
   },
   {
     icon: ShieldCheck,
     title: "Secure Payment",
-    description: "100% protected",
-    detail: "Encrypted at every step"
+    description: "M-Pesa · Airtel Money · Card",
+    detail: "Encrypted and ODPC compliant"
   }
 ];
 

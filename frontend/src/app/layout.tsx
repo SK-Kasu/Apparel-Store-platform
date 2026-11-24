@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
+import { Footer } from "@/components/footer";
+import { StoreProvider } from "@/lib/store-context";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,9 +35,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} bg-ink text-zinc-100 antialiased`}
       >
-        {children}
+        <StoreProvider>
+          {children}
+          <Footer />
+        </StoreProvider>
       </body>
     </html>
   );

@@ -1,22 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Heart } from "lucide-react";
-import type { Recommendation } from "@/lib/store-data";
+import { formatKsh, type StoreProduct } from "@/lib/catalog";
+import { useStore } from "@/lib/store-context";
 
 type ProductCardProps = {
-  product: Recommendation;
-  isFavorite: boolean;
-  onToggleFavorite: (id: string) => void;
-  onAddToBag: (id: string) => void;
+  product: StoreProduct;
 };
 
-export function ProductCard({
-  product,
-  isFavorite,
-  onToggleFavorite,
-  onAddToBag
-}: ProductCardProps) {
+export function ProductCard({ product }: ProductCardProps) {
+  const { addToCart, toggleWishlist, isFavorite } = useStore();
+  const favorite = isFavorite(product.id);
+
   return (
     <article className="group min-w-[238px] flex-1 snap-start sm:min-w-[260px]">
       <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-white/[0.06] bg-panel">
@@ -31,19 +28,15 @@ export function ProductCard({
 
         <button
           type="button"
-          onClick={() => onToggleFavorite(product.id)}
-          aria-label={isFavorite ? `Remove ${product.name} from favorites` : `Save ${product.name}`}
+          onClick={() => toggleWishlist(product.id)}
+          aria-label={favorite ? `Remove ${product.name} from favorites` : `Save ${product.name}`}
           className={`absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur-md transition ${
-            isFavorite
+            favorite
               ? "border-sand/60 bg-black/30 text-sand"
               : "border-white/15 bg-black/20 text-cream/80 hover:border-sand/50 hover:text-sand"
           }`}
         >
-          <Heart
-            size={16}
-            strokeWidth={1.7}
-            fill={isFavorite ? "currentColor" : "none"}
-          />
+          <Heart size={16} strokeWidth={1.7} fill={favorite ? "currentColor" : "none"} />
         </button>
 
         {product.badge ? (
@@ -54,7 +47,7 @@ export function ProductCard({
 
         <button
           type="button"
-          onClick={() => onAddToBag(product.id)}
+          onClick={() => addToCart(product)}
           className="absolute inset-x-3 bottom-3 translate-y-2 rounded-full bg-cream py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-ink opacity-0 transition duration-300 hover:bg-sand group-hover:translate-y-0 group-hover:opacity-100 focus-visible:translate-y-0 focus-visible:opacity-100"
         >
           Add to bag
@@ -62,12 +55,17 @@ export function ProductCard({
       </div>
 
       <div className="mt-4 flex items-start justify-between gap-3">
-        <div>
-          <p className="text-[8px] uppercase tracking-[0.26em] text-zinc-600">{product.category}</p>
+        <div className="min-w-0">
+          <Link
+            href={`/shop/${product.categorySlug}`}
+            className="text-[8px] uppercase tracking-[0.26em] text-zinc-600 transition hover:text-sand"
+          >
+            {product.category}
+          </Link>
           <h3 className="mt-1.5 font-serif text-[21px] leading-tight text-cream">{product.name}</h3>
         </div>
-        <p className="pt-4 text-[13px] font-medium tracking-tight text-sand">
-          ${product.price.toFixed(2)}
+        <p className="shrink-0 pt-4 text-[13px] font-medium tracking-tight text-sand">
+          {formatKsh(product.price)}
         </p>
       </div>
     </article>
