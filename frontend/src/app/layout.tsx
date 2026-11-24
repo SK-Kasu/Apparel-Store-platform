@@ -20,7 +20,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 const brandName = "Radiant Regalia Collection";
-const brandTitle = `${brandName} - All under one roof`;
+const brandTitle = `${brandName} | All under one roof`;
 const brandDescription =
   "Radiant Regalia Collection is a considered edit of modern apparel, footwear, and accessories - all under one roof.";
 

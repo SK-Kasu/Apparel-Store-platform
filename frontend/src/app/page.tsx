@@ -50,11 +50,25 @@ export default function Home() {
         <MobileNav activeCategory={activeCategory} onSelectCategory={handleSelectCategory} />
 
         <main className="workspace-view mx-auto w-full max-w-[1480px] px-4 pb-10 pt-5 sm:px-6 lg:px-8 xl:px-10">
+          <header className="mb-5 flex flex-wrap items-start justify-between gap-3 lg:hidden">
+            <div>
+              <p className="font-serif text-xl leading-none tracking-tight text-cream">
+                Radiant Regalia Collection
+              </p>
+              <p className="mt-1.5 text-[8px] uppercase tracking-[0.32em] text-sand/80">
+                All under one roof
+              </p>
+            </div>
+            <p className="pt-1 text-[9px] uppercase tracking-[0.22em] text-zinc-600">
+              Complimentary shipping over $100
+            </p>
+          </header>
+
           <div className="mb-5 flex items-center justify-between gap-4">
             <p className="text-[9px] uppercase tracking-[0.28em] text-zinc-600">
               {department} / {activeCategory} / Trench
             </p>
-            <p className="hidden text-[9px] uppercase tracking-[0.28em] text-zinc-600 sm:block">
+            <p className="hidden text-[9px] uppercase tracking-[0.28em] text-zinc-600 lg:block">
               Complimentary shipping over $100
             </p>
           </div>

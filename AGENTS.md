@@ -1,50 +1,42 @@
 # AGENTS.md
 
-Seamwork: fullstack apparel storefront/ops platform. npm workspaces monorepo with `server` (Express + Mongoose) and `client` (React/Vite intended).
+Repo package is `seamwork`, but the working storefront is branded **Radiant Regalia Collection — All under one roof**. The Next.js/Prisma stack works; the Express/Mongoose `server/` workspace is an unfinished scaffold. Root npm scripts are stale — use package-local commands.
 
-## Current state (verify before assuming)
+## Boundaries
+- `frontend/` — Next.js 15 App Router, React 19, Tailwind 4, own `package.json`/lockfile, port 3000. Not an npm workspace.
+- `database/` — Prisma 6 + PostgreSQL schema, seed, scrypt password helpers; own `package.json`/lockfile, not a workspace. `schema.prisma` generates two clients: default for `database/`, plus `frontendClient` into `frontend/node_modules/.prisma/client`. Regenerate after schema changes or frontend auth uses a stale client.
+- `frontend/src/app/api/auth/route.ts` imports `database/password` across the package boundary; `frontend/next.config.ts` sets the Turbopack root to the repo root for that. Preserve both when moving files/config.
+- `server/` has Mongoose models, middleware, utils and tests, but no `src/index.ts`, seed, routes, controllers, or services; no API is wired. `client/` is listed as a workspace but has no `package.json`, so root `dev`/`build`/`typecheck` fail. `backend/`, `components/`, `config/`, `infrastructure/` are empty.
+- `ARCHITECTURE.md` describes an intended `backend/` + tenant-isolation design, not current code. Trust scripts/code over prose.
 
-- Only `server/src` has code. `client/` contains empty directories and no `package.json`.
-- `server/src/index.ts`, `server/src/seed.ts`, `server/src/routes/`, and `server/src/controllers/` do not exist yet. No API entrypoint or endpoints are wired.
-- Root `dev`, `build`, and `typecheck` invoke the empty client workspace and fail. Use `-w server` variants for now.
-- `npm test` lists `src/utils/order.test.ts`, which does not exist. The existing `pricing.test.ts` also covers order helpers.
+## Setup / env
+- Install separately in `frontend/` and `database/` (independent lockfiles; no root lockfile). Install at root only for `server/` deps. Node >=20.
+- Root `.env.example` is the Postgres surface (`DATABASE_URL`, `AUTH_SECRET` >=32 chars, `ADMIN_PASSWORD` >=12 chars). Seed reads `database/.env` then root `.env`; Next reads `frontend/.env`, not root `.env`. `SUPABASE_*` are unused in tracked code.
+- `docker compose up -d mongo` provides MongoDB 7 only; there is no Postgres service — supply `DATABASE_URL` externally.
+- `server/.env.example` is a separate Mongo/JWT/Stripe surface (port 4000, `sw_token`, Vite `CLIENT_URL`). Server config is Zod-validated in `server/src/config/env.ts` and exits on invalid values; dotenv loads relative to cwd, so run server scripts from `server/`.
+- Admin auth: `POST`/`DELETE` `/api/auth`, httpOnly cookie `radiant_admin_session` (8h, AES-256-GCM from `AUTH_SECRET`); seeded admin is `admin@radiantregalia.co.ke`. Seed upserts catalog data and prints a generated password if `ADMIN_PASSWORD` is unset.
 
-## Setup
-
-```bash
-npm install                              # from repo root
-cp server/.env.example server/.env
-docker compose up -d mongo               # Mongo 7 on 127.0.0.1:27017
+## Working commands
+From `database/`:
 ```
-
-- Node >= 20. No lint or formatter config exists; do not invent a lint command.
-- Stripe is optional: blank `STRIPE_SECRET_KEY` means mock checkout. Production requires a >=32-char `JWT_SECRET`.
-- API defaults to port 4000; client origin defaults to `http://localhost:5173` via `CLIENT_URL` (comma-separated allowed).
-
-## Commands
-
-```bash
-npm run dev -w server                    # tsx watch src/index.ts (entrypoint missing today)
-npm run build -w server                  # tsc to server/dist
-npm run start -w server                  # node dist/index.js
-npm run typecheck -w server
-npm run seed -w server                   # src/seed.ts (missing today)
-npm test -w server                       # currently fails on missing order.test.ts
+npm run db:generate
+npm run db:push
+npm run db:seed
+npm run typecheck
 ```
+`npm run db:seed` also works from the repo root.
 
-Run a single suite from `server/`: `npx tsx --test src/utils/pricing.test.ts`. Tests use `node:test` + `tsx`, not Jest/Vitest.
+From `frontend/`:
+```
+npm run dev          # Next dev on http://localhost:3000
+npx tsc --noEmit     # no typecheck script
+npm run lint
+npm run build
+```
+Frontend catalog/recommendations and admin overview are static data (`lib/store-data.ts`, `app/admin/page.tsx`); only admin login is Prisma-backed. Root `npm test` targets a missing `src/utils/order.test.ts` and lacks server deps here.
 
-## Conventions
-
-- Read config only through `server/src/config/env.ts` (Zod-validated, exits on invalid). `dotenv/config` loads `server/.env` relative to the process cwd, so run server scripts from `server/` or use the workspace scripts.
-- Money is always integer minor units (cents). Use `calculateTotals`/`formatMoney` in `utils/pricing.ts`; keep model integer validators. `formatMoney` divides by 100.
-- API errors: throw `ApiError`, wrap async routes with `asyncHandler` (`utils/http.ts`). The central handler also maps Zod, Mongoose, duplicate-key, and Stripe errors.
-- Request validation: `validate({ body, query, params })` stores parsed values in `req.validated`, not `req.body`.
-- Auth accepts the `sw_token` cookie or `Authorization: Bearer`; use `requireAuth`/`requireAdmin`. `req.user` and `req.validated` are typed in `types/express.d.ts`.
-- Responses go through `serializeUser`/`serializeProduct`/`serializeOrder` in `utils/serialize.ts`; pass `{ admin: true }` to include Stripe IDs.
-- Order status transitions are defined in `utils/order.ts` (`canTransition`); do not bypass them.
-- TypeScript is strict CommonJS (`server/tsconfig.json`); the build excludes `*.test.ts`.
-
-## Client
-
-When adding the client, make it a workspace with `dev`/`build`/`typecheck` scripts matching the root script names. API CORS/cookies expect Vite on port 5173 and credentials (httpOnly cookie), with `CLIENT_URL` configurable.
+## Server conventions (when extending the scaffold)
+- Money is integer minor units: use `calculateTotals`/`formatMoney` (`utils/pricing.ts`); `formatMoney` divides by 100.
+- Errors: throw `ApiError`, wrap async routes with `asyncHandler`; `validate({ body, query, params })` writes parsed values to `req.validated`, not `req.body`.
+- Auth: `sw_token` cookie or `Authorization: Bearer`; use `requireAuth`/`requireAdmin`. Responses go through `serializeUser`/`serializeProduct`/`serializeOrder` (`{ admin: true }` reveals Stripe IDs). Order transitions use `canTransition` in `utils/order.ts`.
+- Tests are `node:test` + `tsx`; single suite from `server/`: `npx tsx --test src/utils/pricing.test.ts`. Build excludes `*.test.ts`.
