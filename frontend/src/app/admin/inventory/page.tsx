@@ -98,8 +98,14 @@ function formatKSh(value: number): string {
 }
 
 async function readError(response: Response): Promise<string> {
-  const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-  return payload?.error ?? `Request failed with status ${response.status}`;
+  const payload = (await response.clone().json().catch(() => null)) as { error?: string } | null;
+
+  if (payload?.error) {
+    return payload.error;
+  }
+
+  const text = await response.text().catch(() => "");
+  return text.trim() || `Request failed with status ${response.status}`;
 }
 
 function stockTone(count: number): string {
@@ -245,10 +251,11 @@ export default function InventoryPage() {
       const headers = { "content-type": "application/json" };
 
       if (editing) {
-        const productResponse = await fetch(`/api/inventory/products/${editing.productId}`, {
+        const productResponse = await fetch(`/api/inventory/${editing.productId}`, {
           method: "PATCH",
           headers,
           body: JSON.stringify({
+            kind: "product",
             title: form.title,
             category: form.category,
             basePrice: price
@@ -257,10 +264,14 @@ export default function InventoryPage() {
 
         if (!productResponse.ok) throw new Error(await readError(productResponse));
 
-        const variantResponse = await fetch(`/api/inventory/variants/${editing.variantId}`, {
+        const variantResponse = await fetch(`/api/inventory/${editing.variantId}`, {
           method: "PATCH",
           headers,
-          body: JSON.stringify({ inventoryCount: stock, variantPrice: price })
+          body: JSON.stringify({
+            kind: "variant",
+            inventoryCount: stock,
+            variantPrice: price
+          })
         });
 
         if (!variantResponse.ok) throw new Error(await readError(variantResponse));
@@ -317,10 +328,10 @@ export default function InventoryPage() {
     );
 
     try {
-      const response = await fetch(`/api/inventory/variants/${row.id}`, {
+      const response = await fetch(`/api/inventory/${row.id}`, {
         method: "PATCH",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ inventoryCount: nextCount })
+        body: JSON.stringify({ kind: "variant", inventoryCount: nextCount })
       });
 
       if (!response.ok) throw new Error(await readError(response));
@@ -358,7 +369,11 @@ export default function InventoryPage() {
     setError(null);
 
     try {
-      const response = await fetch(`/api/inventory/variants/${row.id}`, { method: "DELETE" });
+      const response = await fetch(`/api/inventory/${row.id}`, {
+        method: "DELETE",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ kind: "variant" })
+      });
 
       if (!response.ok) throw new Error(await readError(response));
       setNotice(`${row.sku} removed from inventory.`);
