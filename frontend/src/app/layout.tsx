@@ -20,9 +20,9 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Daylog — Modern Essentials",
+  title: "Radiant Regalia Collection | All under one roof",
   description:
-    "A considered collection of modern essentials, softly tailored for everyday dressing."
+    "Radiant Regalia Collection is a considered edit of modern apparel, footwear, and accessories - all under one roof."
 };
 
 export default function RootLayout({

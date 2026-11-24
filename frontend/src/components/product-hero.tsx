@@ -138,7 +138,7 @@ export function ProductHero({
         <div className="relative min-h-[520px] overflow-hidden bg-[#202020] lg:min-h-[700px]">
           <Image
             src="/products/trench-coat.jpg"
-            alt="Beige trench coat styled for the Daylog spring collection"
+            alt="Beige trench coat styled for the Radiant Regalia Collection spring edit"
             fill
             priority
             sizes="(min-width: 1024px) 48vw, 100vw"

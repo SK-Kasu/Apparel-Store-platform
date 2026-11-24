@@ -33,6 +33,54 @@ body {
   color: #121212;
 }
 
+.admin-shell {
+  --inv-bg: #f9f6f0;
+  --inv-panel: #ffffff;
+  --inv-panel-soft: #f3ede4;
+  --inv-text: #1c1917;
+  --inv-muted: #6b6258;
+  --inv-border: #e4d9c9;
+  --inv-input: #ffffff;
+  --inv-sand: #d4a373;
+  --inv-sand-soft: #f0dfc9;
+  --inv-danger: #b42318;
+  --inv-success: #26734d;
+  color-scheme: light;
+  background: var(--inv-bg);
+  color: var(--inv-text);
+}
+
+@media (prefers-color-scheme: dark) {
+  .admin-shell {
+    --inv-bg: #121212;
+    --inv-panel: #1a1a1a;
+    --inv-panel-soft: #221f1d;
+    --inv-text: #f4f4f5;
+    --inv-muted: #a1a1aa;
+    --inv-border: rgba(255, 255, 255, 0.09);
+    --inv-input: #121212;
+    --inv-sand: #d4a373;
+    --inv-sand-soft: rgba(212, 163, 115, 0.15);
+    --inv-danger: #f87171;
+    --inv-success: #86efac;
+    color-scheme: dark;
+  }
+}
+
+.inventory-drawer {
+  animation: inventory-slide-in 220ms ease-out;
+}
+
+@keyframes inventory-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
 @layer utilities {
   .no-scrollbar {
     scrollbar-width: none;

@@ -2,6 +2,7 @@ node_modules/
 dist/
 build/
 coverage/
+/backend/generated/
 .env
 .env.*
 !.env.example
